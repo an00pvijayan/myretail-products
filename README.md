@@ -18,3 +18,4 @@ This application is primarily build of spring-boot framework with multiple ReST 
  5. Access endpoint using swagger-ui http://localhost:8080/swagger-ui/#/product-controller
 
 ## Development notes
+* For code coverage execute `mvn verify` 
