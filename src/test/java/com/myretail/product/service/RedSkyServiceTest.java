@@ -2,19 +2,21 @@ package com.myretail.product.service;
 
 import com.myretail.product.configuration.RedSkyProperties;
 import com.myretail.product.exception.ProductNotFoundException;
+import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RedSkyServiceTest {
@@ -43,8 +45,9 @@ public class RedSkyServiceTest {
     when(properties.getUrl()).thenReturn("http://mockredskyserver");
     when(properties.getKey()).thenReturn("mockKey");
     when(restTemplate.getForObject(properties.getUrl(), String.class, properties.getKey(), 1L))
-        .thenThrow(new RestClientException("Invalid Client"));
+        .thenThrow(new JSONException("Invalid response"));
     assertThrows(
-        ProductNotFoundException.class, () -> redSkyService.getProductName(1L), "Invalid Client");
+        ProductNotFoundException.class, () -> redSkyService.getProductName(1L), "Invalid response");
   }
+
 }

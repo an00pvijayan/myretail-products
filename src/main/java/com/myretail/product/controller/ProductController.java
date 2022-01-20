@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("products")
@@ -15,10 +14,8 @@ import java.util.concurrent.ExecutionException;
 public class ProductController {
 
   private final ProductService productService;
-
   @GetMapping("/{id}")
-  public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id)
-      throws ExecutionException, InterruptedException {
+  public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(productService.getProductById(id));
   }
 

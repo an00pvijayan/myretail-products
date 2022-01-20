@@ -12,10 +12,13 @@ This application is primarily build of spring-boot framework with multiple ReST 
  2. MongoDB compass (optional)
 ### How to run application locally
  1. Clone the application from repository to local workspace using (git clone https://github.com/an00pvijayan/myretail-products.git)
- 2. Start Docker and initialize MongoDB backend (docker-compose up -d)
- 3. Build the application using mvn clean build
- 4. Execute the application by either running the ProductApplication class directly or execute `java -jar service/target/myretail-products-service-<version>.jar`
+ 2. Start Docker and initialize MongoDB backend (`docker-compose up -d`)
+ 3. Build the application using `mvn clean build`
+ 4. Execute the application by either running the ProductApplication class directly or execute `java -jar service/target/myretail-products-<version>.jar`
  5. Access endpoint using swagger-ui http://localhost:8080/swagger-ui/#/product-controller
 
 ## Development notes
-* For code coverage execute `mvn verify` 
+### Jacoco and PMD
+Jacoco code coverage with PMD code analysis are performed as a part of maven build.
+To skip pmd analysis, please use `-Dpmd.skip` parameter
+The reports can be found in `/target/site` location
