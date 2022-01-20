@@ -1,0 +1,21 @@
+[{
+  "_id": 13860428,
+  "value": 32.21,
+  "currencyCode": "USD",
+  "_class": "com.myretail.product.model.ProductPrice"
+},{
+  "_id": 54456119,
+  "value": 13.49,
+  "currencyCode": "USD",
+  "_class": "com.myretail.product.model.ProductPrice"
+},{
+  "_id": 13264003,
+  "value": 23.45,
+  "currencyCode": "USD",
+  "_class": "com.myretail.product.model.ProductPrice"
+},{
+  "_id": 12954218,
+  "value": 45.67,
+  "currencyCode": "USD",
+  "_class": "com.myretail.product.model.ProductPrice"
+}]
