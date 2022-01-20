@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class RedSkyService {
   private final RestTemplate restTemplate;
   private final RedSkyProperties properties;
 
-  @Retryable(value = RestClientException.class, maxAttempts = 2, backoff = @Backoff(delay = 500))
+  @Retryable(value = ResourceAccessException.class, maxAttempts = 2, backoff = @Backoff(delay = 500))
   public String getProductName(Long id) {
     try {
       String productDataString =
