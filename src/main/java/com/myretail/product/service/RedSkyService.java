@@ -20,7 +20,10 @@ public class RedSkyService {
   private final RestTemplate restTemplate;
   private final RedSkyProperties properties;
 
-  @Retryable(value = ResourceAccessException.class, maxAttempts = 2, backoff = @Backoff(delay = 500))
+  @Retryable(
+      value = ResourceAccessException.class,
+      maxAttemptsExpression = "${redsky.client.retry.maxAttempts}",
+      backoff = @Backoff(delayExpression = "${redsky.client.readTimeOut}"))
   public String getProductName(Long id) {
     try {
       String productDataString =

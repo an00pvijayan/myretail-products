@@ -35,7 +35,7 @@ public class ProductServiceTest {
     when(productPriceRepository.findById(1L)).thenReturn(Optional.of(mockProductPrice));
     ProductDto product = productService.getProductById(1L);
     assertEquals("My Product", product.getName());
-    assertEquals(USD, product.getCurrentPrice().getCurrencyCode());
+    assertEquals(USD.name(), product.getCurrentPrice().getCurrencyCode());
     assertEquals(3.14, product.getCurrentPrice().getValue());
     verify(redSkyService, times(1)).getProductName(1L);
     verify(productPriceRepository, times(1)).findById(1L);
@@ -63,7 +63,7 @@ public class ProductServiceTest {
     ProductNotFoundException exception =
         assertThrows(ProductNotFoundException.class, () -> productService.getProductById(1L));
     assertEquals(
-        "404 NOT_FOUND \"Product price details not found for id: 1\"", exception.getReason());
+        "404 NOT_FOUND \"Product price details not found for productId: 1\"", exception.getReason());
     verify(redSkyService, times(1)).getProductName(1L);
     verify(productPriceRepository, times(1)).findById(1L);
   }
@@ -77,7 +77,8 @@ public class ProductServiceTest {
     mockProductPrice.setCurrencyCode(USD);
     mockProductPrice.setId(2L);
     when(productPriceRepository.findById(2L)).thenReturn(Optional.of(mockProductPrice));
-    productService.updateProduct(2L, new ProductDto(2L, "EMPTY", new ProductPriceDto(5.0, USD)));
+    productService.updateProduct(
+        2L, new ProductDto(2L, "EMPTY", new ProductPriceDto(5.0, USD.name())));
     verify(productPriceRepository, times(1)).save(productPriceArgumentCaptor.capture());
     assertEquals(5.0, productPriceArgumentCaptor.getValue().getValue());
   }
@@ -90,8 +91,8 @@ public class ProductServiceTest {
             ProductNotFoundException.class,
             () ->
                 productService.updateProduct(
-                    2L, new ProductDto(2L, "EMPTY", new ProductPriceDto(5.0, USD))));
-    assertEquals("Product not found for price update. id = 2",exception.getReason());
+                    2L, new ProductDto(2L, "EMPTY", new ProductPriceDto(5.0, USD.name()))));
+    assertEquals("Product not found for price update. productId = 2", exception.getReason());
     verify(productPriceRepository, times(0)).save(any(ProductPrice.class));
   }
 }

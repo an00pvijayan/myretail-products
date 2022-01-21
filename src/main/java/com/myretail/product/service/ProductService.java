@@ -23,29 +23,51 @@ public class ProductService {
   private final ProductPriceRepository productPriceRepository;
   private final RedSkyService redSkyService;
 
-  public ProductDto getProductById(Long id) {
-    return buildProductFromId(id);
+  /**
+   * Method to retrieve Product by productId
+   *
+   * @param productId
+   * @return product {@link ProductDto} product price is available in DB and in redsky service.
+   * @throws ProductNotFoundException if product not found
+   */
+  public ProductDto getProductById(Long productId) {
+    return buildProductFromId(productId);
   }
 
-  public void updateProduct(Long id, ProductDto updatedProductDto) {
+  /**
+   * Updates product price value for valid productId
+   *
+   * @param productId
+   * @param updatedProductDto
+   * @throws ProductNotFoundException if productId is not found in DB
+   */
+  public void updateProduct(Long productId, ProductDto updatedProductDto) {
     ProductPrice productPrice =
         productPriceRepository
-            .findById(id)
+            .findById(productId)
             .orElseThrow(
                 () -> {
-                  log.error("Unable to update price for id {}", id);
+                  log.error("Unable to update price for productId {}", productId);
                   throw new ProductNotFoundException(
-                      "Product not found for price update. id = ".concat(String.valueOf(id)));
+                      "Product not found for price update. productId = "
+                          .concat(String.valueOf(productId)));
                 });
     productPrice.setValue(updatedProductDto.getCurrentPrice().getValue());
     productPriceRepository.save(productPrice);
   }
 
-  private ProductDto buildProductFromId(Long id) {
+  /**
+   * Method to retrieve product details from {@link RedSkyService} and DB, merges and create {@link
+   * ProductDto}
+   *
+   * @param productId
+   * @throws ProductNotFoundException if data was not retrieved from either RedSky or DB
+   */
+  private ProductDto buildProductFromId(Long productId) {
     CompletableFuture<Optional<ProductPrice>> productPriceCompletableFuture =
-        CompletableFuture.supplyAsync(() -> productPriceRepository.findById(id));
+        CompletableFuture.supplyAsync(() -> productPriceRepository.findById(productId));
     CompletableFuture<String> productNameCompletableFuture =
-        CompletableFuture.supplyAsync(() -> redSkyService.getProductName(id));
+        CompletableFuture.supplyAsync(() -> redSkyService.getProductName(productId));
     try {
       return productPriceCompletableFuture
           .thenCombine(
@@ -53,13 +75,15 @@ public class ProductService {
               (productPriceOptional, productName) -> {
                 if (productPriceOptional.isEmpty() || isBlank(productName)) {
                   throw new ProductNotFoundException(
-                      "Product price details not found for id: ".concat(String.valueOf(id)));
+                      "Product price details not found for productId: "
+                          .concat(String.valueOf(productId)));
                 }
                 ProductPrice productPrice = productPriceOptional.get();
                 return new ProductDto(
                     productPrice.getId(),
                     productName,
-                    new ProductPriceDto(productPrice.getValue(), productPrice.getCurrencyCode()));
+                    new ProductPriceDto(
+                        productPrice.getValue(), productPrice.getCurrencyCode().name()));
               })
           .get();
     } catch (InterruptedException | ExecutionException e) {

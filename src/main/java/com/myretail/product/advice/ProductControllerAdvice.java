@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controller advice to catch all unhandled exceptions and returns an error response
+ */
 @RestControllerAdvice
 public class ProductControllerAdvice {
 

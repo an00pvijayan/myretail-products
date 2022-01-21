@@ -37,7 +37,7 @@ class ProductControllerTest {
   void testGetProductById() throws Exception {
     mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     ProductDto mockServiceResponse =
-        new ProductDto(1L, "product 1", new ProductPriceDto(3.14, Currency.USD));
+        new ProductDto(1L, "product 1", new ProductPriceDto(3.14, Currency.USD.name()));
     when(productService.getProductById(1L)).thenReturn(mockServiceResponse);
     MvcResult response =
         mockMvc
@@ -63,7 +63,8 @@ class ProductControllerTest {
 
   @Test
   void testUpdateProduct() throws Exception {
-    ProductDto request = new ProductDto(1L, "product 1", new ProductPriceDto(3.14, Currency.USD));
+    ProductDto request =
+        new ProductDto(1L, "product 1", new ProductPriceDto(3.14, Currency.USD.name()));
     MvcResult response =
         mockMvc
             .perform(
