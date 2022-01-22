@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -20,10 +20,16 @@ public class RedSkyService {
   private final RestTemplate restTemplate;
   private final RedSkyProperties properties;
 
+  /**
+   * Service to contact RedSky service and retrieve product details by tcin.
+   * This service retries to retrieve information from redsky service in http status 4xx is returned from service.
+   * @param id represents tcin
+   * @return Product name if found in redsky service . Throws exception if not found.
+   */
   @Retryable(
-      value = ResourceAccessException.class,
+      value = HttpClientErrorException.class,
       maxAttemptsExpression = "${redsky.client.retry.maxAttempts}",
-      backoff = @Backoff(delayExpression = "${redsky.client.readTimeOut}"))
+      backoff = @Backoff(delayExpression = "${redsky.client.retry.backoffMilliseconds}"))
   public String getProductName(Long id) {
     try {
       String productDataString =

@@ -17,9 +17,19 @@ This application is primarily build of spring-boot framework with multiple ReST 
  5. Access endpoint using swagger-ui http://localhost:8080/swagger-ui/#/product-controller
  6. Access the mongodb client http://localhost:8081/db/myretail/
 ### Sample requests
- 1. curl -X GET "http://localhost:8080/products/54456119" -H "accept: */*"
- 2. curl -X PUT "http://localhost:8080/products/54456119" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"current_price\": { \"value\": 13.50 }}"
-
+ #### CURL
+ 1. `curl -X GET "http://localhost:8080/products/54456119" -H "accept: */*"`
+ 2. `curl -X PUT "http://localhost:8080/products/54456119" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"current_price\": { \"value\": 13.50 }}"`
+ #### Swagger request json
+ ```
+ // for put endpoint
+ { 
+    "current_price": 
+        { 
+            "value": 13.50 
+        }
+ }
+ ```
 ## Development notes
 ### Jacoco and PMD
 Jacoco code coverage with PMD code analysis are performed as a part of maven build.
