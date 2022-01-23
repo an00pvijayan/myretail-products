@@ -42,6 +42,20 @@ public class ProductServiceTest {
   }
 
   @Test
+  void testGetProductById_empty_response() {
+    when(redSkyService.getProductName(1L)).thenReturn("");
+    ProductPrice mockProductPrice = new ProductPrice();
+    mockProductPrice.setValue(3.14);
+    mockProductPrice.setCurrencyCode(USD);
+    mockProductPrice.setId(1L);
+    when(productPriceRepository.findById(1L)).thenReturn(Optional.of(mockProductPrice));
+    ProductNotFoundException exception =
+            assertThrows(ProductNotFoundException.class, () -> productService.getProductById(1L));
+    verify(redSkyService, times(1)).getProductName(1L);
+    verify(productPriceRepository, times(1)).findById(1L);
+  }
+
+  @Test
   void testGetProductByIdErrorRedSky() {
     when(redSkyService.getProductName(1L)).thenThrow(new ProductNotFoundException("RedSky Error"));
     ProductPrice mockProductPrice = new ProductPrice();

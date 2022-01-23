@@ -2,6 +2,7 @@ package com.myretail.product.service;
 
 import com.myretail.product.configuration.RedSkyProperties;
 import com.myretail.product.exception.ProductNotFoundException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -9,7 +10,7 @@ import org.json.JSONObject;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -26,8 +27,9 @@ public class RedSkyService {
    * @param id represents tcin
    * @return Product name if found in redsky service . Throws exception if not found.
    */
+  @Timed("redsky_get-product")
   @Retryable(
-      value = HttpClientErrorException.class,
+      value = HttpServerErrorException.class,
       maxAttemptsExpression = "${redsky.client.retry.maxAttempts}",
       backoff = @Backoff(delayExpression = "${redsky.client.retry.backoffMilliseconds}"))
   public String getProductName(Long id) {

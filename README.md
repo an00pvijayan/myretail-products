@@ -12,7 +12,7 @@ This application is primarily build of spring-boot framework with multiple ReST 
 ### How to run application locally
  1. Clone the application from repository to local workspace using (git clone https://github.com/an00pvijayan/myretail-products.git)
  2. Start Docker and initialize MongoDB backend (`docker-compose up -d`). This will also start mongo-express client
- 3. Build the application using `mvn clean build`
+ 3. Build the application using `mvn clean install`
  4. Execute the application by either running the ProductApplication class directly or execute `java -jar service/target/myretail-products-<version>.jar`
  5. Access endpoint using swagger-ui http://localhost:8080/swagger-ui/#/product-controller
  6. Access the mongodb client http://localhost:8081/db/myretail/
@@ -35,3 +35,11 @@ This application is primarily build of spring-boot framework with multiple ReST 
 Jacoco code coverage with PMD code analysis are performed as a part of maven build.
 To skip pmd analysis, please use `-Dpmd.skip` parameter
 The reports can be found in `/target/site` location
+
+### Performance metrics
+The application implements Micrometer JmxMeterRegistry for tracking performance.
+This can be observed using locally available *Java Monitoring and Management Console*. 
+
+1. execute `jconsole` from terminal to access the console. 
+2. connect local process ends with the ProductApplication (insecure connection)
+3. custom metrics are grouped under *metrics* folder
