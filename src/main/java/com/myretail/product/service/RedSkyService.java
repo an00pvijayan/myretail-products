@@ -23,7 +23,7 @@ public class RedSkyService {
 
   /**
    * Service to contact RedSky service and retrieve product details by tcin.
-   * This service retries to retrieve information from redsky service in http status 4xx is returned from service.
+   * This service retries to retrieve information from redsky service in http status 5xx is returned from service.
    * @param id represents tcin
    * @return Product name if found in redsky service . Throws exception if not found.
    */
